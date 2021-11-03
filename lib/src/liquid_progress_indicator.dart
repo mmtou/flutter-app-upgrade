@@ -3,25 +3,25 @@ import 'package:flutter_app_upgrade/src/wave.dart';
 
 class LiquidLinearProgressIndicator extends ProgressIndicator {
   ///The width of the border, if this is set [borderColor] must also be set.
-  final double borderWidth;
+  final double? borderWidth;
 
   ///The color of the border, if this is set [borderWidth] must also be set.
-  final Color borderColor;
+  final Color? borderColor;
 
   ///The radius of the border.
-  final double borderRadius;
+  final double? borderRadius;
 
   ///The widget to show in the center of the progress indicator.
-  final Widget center;
+  final Widget? center;
 
   ///The direction the liquid travels.
-  final Axis direction;
+  final Axis? direction;
 
   LiquidLinearProgressIndicator({
-    Key key,
+    Key? key,
     double value = 0.5,
-    Color backgroundColor,
-    Animation<Color> valueColor,
+    Color? backgroundColor,
+    Animation<Color>? valueColor,
     this.borderWidth,
     this.borderColor,
     this.borderRadius,
@@ -55,24 +55,24 @@ class _LiquidLinearProgressIndicatorState
   Widget build(BuildContext context) {
     return ClipPath(
       clipper: _LinearClipper(
-        radius: widget.borderRadius,
+        radius: widget.borderRadius ?? 0,
       ),
       child: CustomPaint(
         painter: _LinearPainter(
           color: widget._getBackgroundColor(context),
-          radius: widget.borderRadius,
+          radius: widget.borderRadius ?? 0,
         ),
         foregroundPainter: _LinearBorderPainter(
-          color: widget.borderColor,
-          width: widget.borderWidth,
-          radius: widget.borderRadius,
+          color: widget.borderColor ?? Colors.white,
+          width: widget.borderWidth ?? 0,
+          radius: widget.borderRadius ?? 0,
         ),
         child: Stack(
           children: <Widget>[
             Wave(
-              value: widget.value,
+              value: widget.value ?? 0,
               color: widget._getValueColor(context),
-              direction: widget.direction,
+              direction: widget.direction ?? Axis.vertical,
             ),
             widget.center != null ? Center(child: widget.center) : Container(),
           ],
@@ -86,7 +86,7 @@ class _LinearPainter extends CustomPainter {
   final Color color;
   final double radius;
 
-  _LinearPainter({@required this.color, @required this.radius});
+  _LinearPainter({required this.color, required this.radius});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -94,7 +94,7 @@ class _LinearPainter extends CustomPainter {
     canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius ?? 0),
+          Radius.circular(radius),
         ),
         paint);
   }
@@ -109,9 +109,9 @@ class _LinearBorderPainter extends CustomPainter {
   final double radius;
 
   _LinearBorderPainter({
-    @required this.color,
-    @required this.width,
-    @required this.radius,
+    required this.color,
+    required this.width,
+    required this.radius,
   });
 
   @override
@@ -124,12 +124,12 @@ class _LinearBorderPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = width;
-    final alteredRadius = radius ?? 0;
+    final alteredRadius = radius;
     canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(
               width / 2, width / 2, size.width - width, size.height - width),
-          Radius.circular(alteredRadius - width ?? 0),
+          Radius.circular(alteredRadius - width),
         ),
         paint);
   }
@@ -144,7 +144,7 @@ class _LinearBorderPainter extends CustomPainter {
 class _LinearClipper extends CustomClipper<Path> {
   final double radius;
 
-  _LinearClipper({@required this.radius});
+  _LinearClipper({required this.radius});
 
   @override
   Path getClip(Size size) {
@@ -152,7 +152,7 @@ class _LinearClipper extends CustomClipper<Path> {
       ..addRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius ?? 0),
+          Radius.circular(radius),
         ),
       );
     return path;
