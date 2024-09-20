@@ -1,6 +1,6 @@
 name: flutter_app_upgrade
 description: App 升级功能
-version: 2.0.0
+version: 2.1.0
 homepage: http://laomengit.com/plugin/upgrade.html
 
 environment:
